@@ -14,11 +14,14 @@ import nomilous.client.Subscriber;
  * 
  */
 
+import android.os.Bundle;
 import android.content.Context;
 import android.location.LocationManager;
+import android.location.LocationListener;
+import android.location.Location;
 
 
-public class LocationServer extends android.os.Handler  {
+public class LocationServer  {
 
     private final int eventCode = Updates.GPS_LOCATION_UPDATE;
     private Subscriber subscriber;
@@ -74,11 +77,57 @@ public class LocationServer extends android.os.Handler  {
     }
 
 
-    private void send( String message ) {
+    private void updateLocation( Location location ) {
 
-        this.subscriber.onMessage( eventCode, message );
+        this.subscriber.onMessage( 
+
+            Updates.GPS_LOCATION_UPDATE, 
+            location 
+
+        );
 
     }
+
+    private final LocationListener listener = new LocationListener() {
+
+        @Override
+        public void onLocationChanged(Location location) {
+
+            updateLocation( location );
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+            //
+            // TODO: Handle disabled Location Service
+            //
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+            //
+            // TODO: Handle enabled Location Service
+            //
+
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+
+            //
+            // TODO: Handle whatever this is.
+            // 
+            //       also: Find out what it is...
+            //
+
+        }
+
+    };
 
 
 
