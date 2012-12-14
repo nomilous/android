@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import nomilous.server.Messenger;
 import nomilous.server.sensor.Location;
+import nomilous.client.Subscriber;
 
 public class MainActivity extends Activity
 {
@@ -15,9 +17,27 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        TextView showLocation = (TextView)findViewById(R.id.showLocation);
+        final TextView showLocation = (TextView)findViewById(R.id.showLocation);
 
-        showLocation.setText(  Location.test()  );
+
+        Messenger m = new Messenger();
+
+        m.subscribe( 
+
+            Messenger.GPS_LOCATION_UPDATE, 
+
+            new Subscriber() {
+
+                @Override
+                public void onMessage( int event, Object payload ) {
+
+                    showLocation.setText(  (String) payload  );
+
+                }
+
+            }
+
+        );
 
     }
 }

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ant uninstall
+
 ant debug && \
 ant installd && \
 adb shell am start -n nomilous.app2/.MainActivity
