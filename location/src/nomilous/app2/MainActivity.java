@@ -3,9 +3,12 @@ package nomilous.app2;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.location.Location;
 
 import nomilous.server.Updates;
 import nomilous.client.Subscriber;
+
+import nomilous.Util;
 
 public class MainActivity extends Activity
 {
@@ -27,7 +30,13 @@ public class MainActivity extends Activity
                 @Override
                 public void onMessage( int event, Object payload ) {
 
-                    showLocation.setText(  (String) payload  );
+                    Location location = (Location) payload;
+
+                    showLocation.setText(  
+
+                        location.getLatitude() + " " + location.getLongitude()
+
+                    );
 
                 }
 

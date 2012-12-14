@@ -44,9 +44,10 @@ public class LocationServer  {
         if( ! ensureGPSEnabled() ) {
 
             Util.messageUser( appContext, "no GPS or not enabled" );
-            return;
 
         }
+
+        start();
 
     }
 
@@ -93,12 +94,17 @@ public class LocationServer  {
         @Override
         public void onLocationChanged(Location location) {
 
+            Util.info( "LocationServer listener.onLocationChanged: " + 
+                location.getLatitude() + " " + location.getLongitude() );
+
             updateLocation( location );
 
         }
 
         @Override
         public void onProviderDisabled(String provider) {
+
+            Util.info( "LocationServer listener.onProviderDisabled: " + provider );
 
             //
             // TODO: Handle disabled Location Service
@@ -109,6 +115,8 @@ public class LocationServer  {
         @Override
         public void onProviderEnabled(String provider) {
 
+            Util.info( "LocationServer listener.onProviderEnabled: " + provider );
+
             //
             // TODO: Handle enabled Location Service
             //
@@ -118,6 +126,7 @@ public class LocationServer  {
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
 
+            Util.info( "LocationServer listener.onStatusChanged: " + provider + " " + status );
 
             //
             // TODO: Handle whatever this is.
@@ -129,6 +138,31 @@ public class LocationServer  {
 
     };
 
+    private void start() {
 
+        //
+        // send last known location 
+        //
+
+        updateLocation( 
+
+            locationManager.getLastKnownLocation( LocationManager.GPS_PROVIDER )
+
+        );
+
+        //
+        // register listener for location updates
+        //
+
+        locationManager.requestLocationUpdates( 
+
+            LocationManager.GPS_PROVIDER,
+            10000,  // Every 10 seconds
+            10,     // Or every 10 meters 
+            listener
+
+        );
+
+    }
 
 }
