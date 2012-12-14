@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 
 
-class Messenger extends android.os.Handler {
+class Messenger extends android.os.Handler 
+    implements Subscriber {
 
     //
     // http://developer.android.com/reference/android/os/Handler.html
@@ -29,21 +30,24 @@ class Messenger extends android.os.Handler {
 
         ).add( newSubscriber );
 
-
-
-        // 
-        // TEMPORARY: send message
-        // 
-
-        newSubscriber.onMessage( eventCode, "TEST UPDATE" );
-
     }
-
-
 
     //
     // private
     //
+
+    @Override
+    public void onMessage( int eventCode, Object payload ) {
+
+        ArrayList<Subscriber> subscriberList = 
+
+            (ArrayList<Subscriber>) this.subscribers.get( eventCode );
+
+        for( Subscriber subscriber : subscriberList )
+
+            subscriber.onMessage( eventCode, payload );
+
+    }
 
     private ArrayList<Object> servers = null;
 
@@ -69,7 +73,7 @@ class Messenger extends android.os.Handler {
 
             case Updates.GPS_LOCATION_UPDATE:
 
-                this.servers.set( eventCode, new LocationServer());
+                this.servers.set( eventCode, new LocationServer( this ));
                 break;
 
         }
