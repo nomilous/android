@@ -2,6 +2,9 @@ package nomilous.app2;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.widget.TextView;
+
+import nomilous.server.sensor.Location;
 
 public class MainActivity extends Activity
 {
@@ -11,5 +14,10 @@ public class MainActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        TextView showLocation = (TextView)findViewById(R.id.showLocation);
+
+        showLocation.setText(  Location.test()  );
+
     }
 }

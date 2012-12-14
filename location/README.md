@@ -7,4 +7,6 @@ Accessing the gps location
     
     $ android update project --path .
 
+    $ ./run # builds, install and runs
+
 ```
