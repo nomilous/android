@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import nomilous.server.Messenger;
-import nomilous.server.sensor.Location;
+import nomilous.server.Updates;
 import nomilous.client.Subscriber;
 
 public class MainActivity extends Activity
@@ -19,12 +18,9 @@ public class MainActivity extends Activity
 
         final TextView showLocation = (TextView)findViewById(R.id.showLocation);
 
+        Updates.subscribe( 
 
-        Messenger m = new Messenger();
-
-        m.subscribe( 
-
-            Messenger.GPS_LOCATION_UPDATE, 
+            Updates.GPS_LOCATION_UPDATE, 
 
             new Subscriber() {
 
@@ -40,4 +36,5 @@ public class MainActivity extends Activity
         );
 
     }
+
 }
