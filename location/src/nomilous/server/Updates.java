@@ -3,6 +3,8 @@ package nomilous.server;
 import nomilous.server.Messenger;
 import nomilous.client.Subscriber;
 
+import android.content.Context;
+
 public class Updates {
 
     public static final int NOOP                  = 0;
@@ -10,9 +12,9 @@ public class Updates {
     // Dodge bugs in android ArrayList by pre initializing to size
     public static final int HIGHEST_EVENT_CODE    = 2;
 
-    public static void subscribe( int event, Subscriber newSubscriber ) {
+    public static void subscribe( Context appContext, int event, Subscriber newSubscriber ) {
 
-        m.subscribe( event, newSubscriber );
+        m.subscribe( appContext, event, newSubscriber );
 
     }
 

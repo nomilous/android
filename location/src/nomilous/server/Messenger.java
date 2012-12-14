@@ -4,21 +4,21 @@ import nomilous.client.Subscriber;
 import nomilous.server.sensor.LocationServer;
 
 import android.os.Handler;
+import android.content.Context;
 import java.util.ArrayList;
 
 
 
-class Messenger extends android.os.Handler 
-    implements Subscriber {
+class Messenger implements Subscriber {
 
     //
     // http://developer.android.com/reference/android/os/Handler.html
     //
 
-    public void subscribe( int eventCode, Subscriber newSubscriber ) {
+    public void subscribe( Context appContext, int eventCode, Subscriber newSubscriber ) {
 
         initSubscribersArray();
-        initServer( eventCode );
+        initServer( appContext, eventCode );
 
         //
         // TODO: check handler not already registered... 
@@ -51,7 +51,7 @@ class Messenger extends android.os.Handler
 
     private ArrayList<Object> servers = null;
 
-    private void initServer( int eventCode ) {
+    private void initServer( Context appContext, int eventCode ) {
 
         if( this.servers == null ) {
 
@@ -73,7 +73,7 @@ class Messenger extends android.os.Handler
 
             case Updates.GPS_LOCATION_UPDATE:
 
-                this.servers.set( eventCode, new LocationServer( this ));
+                this.servers.set( eventCode, new LocationServer( appContext, this ));
                 break;
 
         }

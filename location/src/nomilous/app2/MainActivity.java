@@ -18,7 +18,7 @@ public class MainActivity extends Activity
 
         final TextView showLocation = (TextView)findViewById(R.id.showLocation);
 
-        Updates.subscribe( 
+        Updates.subscribe( getApplicationContext(),
 
             Updates.GPS_LOCATION_UPDATE, 
 
