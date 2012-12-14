@@ -11,10 +11,6 @@ import java.util.ArrayList;
 
 class Messenger implements Subscriber {
 
-    //
-    // http://developer.android.com/reference/android/os/Handler.html
-    //
-
     public void subscribe( Context appContext, int eventCode, Subscriber newSubscriber ) {
 
         initSubscribersArray();
