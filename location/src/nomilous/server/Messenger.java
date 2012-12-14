@@ -1,9 +1,12 @@
 package nomilous.server;
 
 import nomilous.client.Subscriber;
+import nomilous.server.sensor.LocationServer;
 
 import android.os.Handler;
 import java.util.ArrayList;
+
+
 
 class Messenger extends android.os.Handler {
 
@@ -11,9 +14,10 @@ class Messenger extends android.os.Handler {
     // http://developer.android.com/reference/android/os/Handler.html
     //
 
-    public void subscribe( int event, Subscriber newSubscriber ) {
+    public void subscribe( int eventCode, Subscriber newSubscriber ) {
 
         initSubscribersArray();
+        initServer( eventCode );
 
         //
         // TODO: check handler not already registered... 
@@ -21,7 +25,7 @@ class Messenger extends android.os.Handler {
 
         ((ArrayList)
             
-             this.subscribers.get( event ) 
+             this.subscribers.get( eventCode ) 
 
         ).add( newSubscriber );
 
@@ -31,7 +35,7 @@ class Messenger extends android.os.Handler {
         // TEMPORARY: send message
         // 
 
-        newSubscriber.onMessage( event, "TEST UPDATE" );
+        newSubscriber.onMessage( eventCode, "TEST UPDATE" );
 
     }
 
@@ -40,6 +44,37 @@ class Messenger extends android.os.Handler {
     //
     // private
     //
+
+    private ArrayList<Object> servers = null;
+
+    private void initServer( int eventCode ) {
+
+        if( this.servers == null ) {
+
+            //
+            // init Array of servers
+            //
+
+            this.servers = new ArrayList<Object>();
+
+            for( int i = 0; i < Updates.HIGHEST_EVENT_CODE; i++ )
+
+                this.servers.add( null );
+
+        }
+
+        if( this.servers.get( eventCode ) != null ) return;
+
+        switch( eventCode ) {
+
+            case Updates.GPS_LOCATION_UPDATE:
+
+                this.servers.set( eventCode, new LocationServer());
+                break;
+
+        }
+
+    }
 
     private ArrayList<Object> subscribers = null;
 

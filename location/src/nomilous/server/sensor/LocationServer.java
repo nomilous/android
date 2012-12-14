@@ -1,5 +1,5 @@
 package nomilous.server.sensor;
 
-class Location {
+public class LocationServer {
 
 }
