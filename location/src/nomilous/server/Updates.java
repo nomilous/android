@@ -9,8 +9,11 @@ public class Updates {
 
     public static final int NOOP                  = 0;
     public static final int GPS_LOCATION_UPDATE   = 1;
+    public static final int ACCELERATION_UPDATE   = 2;
+    public static final int MAGNETIC_FIELD_UPDATE = 3;
+    public static final int ROTATION_UPDATE       = 4;
     // Dodge bugs in android ArrayList by pre initializing to size
-    public static final int HIGHEST_EVENT_CODE    = 2;
+    public static final int HIGHEST_EVENT_CODE    = 5;
 
     public static void subscribe( Context appContext, int event, Subscriber newSubscriber ) {
 
