@@ -1,7 +1,7 @@
 package nomilous.server;
 
 import nomilous.client.Subscriber;
-import nomilous.server.sensor.LocationServer;
+import nomilous.server.sensor.*;
 
 import android.os.Handler;
 import android.content.Context;
@@ -72,7 +72,37 @@ class Messenger implements Subscriber {
                 this.servers.set( eventCode, new LocationServer( appContext, this ));
                 break;
 
+            case Updates.ACCELERATION_UPDATE:
+
+                initOrientationServer( appContext );
+                break;
+
+            case Updates.MAGNETIC_FIELD_UPDATE:
+
+                initOrientationServer( appContext );
+                break;
+
+            case Updates.ROTATION_UPDATE:
+
+                initOrientationServer( appContext );
+                break;
+
         }
+
+    }
+
+    private void initOrientationServer( Context appContext ) {
+
+        //
+        // OrientationServer provides 3 separate events
+        // Only maintain one instance
+        //
+
+        OrientationServer s = new OrientationServer( appContext, this );
+
+        this.servers.set( Updates.ACCELERATION_UPDATE, s );
+        this.servers.set( Updates.MAGNETIC_FIELD_UPDATE, s );
+        this.servers.set( Updates.ROTATION_UPDATE, s );
 
     }
 

@@ -20,23 +20,52 @@ public class MainActivity extends Activity
         setContentView(R.layout.main);
 
         final TextView showLocation = (TextView)findViewById(R.id.showLocation);
+        final TextView showAcceleration = (TextView)findViewById(R.id.showAcceleration);
+        final TextView showMagneticField = (TextView)findViewById(R.id.showMagneticField);
+
+        showLocation.setText( "GPS" );
+        showAcceleration.setText( "Accelerometer" );
+        showMagneticField.setText( "Compass" );
 
         Updates.subscribe( getApplicationContext(),
 
-            Updates.GPS_LOCATION_UPDATE, 
+            // Updates.GPS_LOCATION_UPDATE, 
+            Updates.ACCELERATION_UPDATE,
+            //Updates.MAGNETIC_FIELD_UPDATE,
 
             new Subscriber() {
 
                 @Override
                 public void onMessage( int event, Object payload ) {
 
-                    Location location = (Location) payload;
 
-                    showLocation.setText(  
+                    switch( event ) {
 
-                        location.getLatitude() + " " + location.getLongitude()
+                        case Updates.GPS_LOCATION_UPDATE:
 
-                    );
+                            Location location = (Location) payload;
+                            showLocation.setText(  
+                            location.getLatitude() + " " + location.getLongitude()
+                            );
+                            break;
+
+                        case Updates.ACCELERATION_UPDATE:
+
+                            float[] avec = (float[]) payload;
+                            showAcceleration.setText(
+                            avec[0] + " " + avec[1] + " " + avec[2]
+                            );
+                            break;
+
+                        case Updates.MAGNETIC_FIELD_UPDATE:
+
+                            float[] with = (float[]) payload;
+                            showMagneticField.setText(
+                            with[0] + " " + with[1] + " " + with[2]
+                            );
+                            break;
+
+                    }
 
                 }
 
