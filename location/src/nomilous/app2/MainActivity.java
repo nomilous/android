@@ -22,15 +22,17 @@ public class MainActivity extends Activity
         final TextView showLocation = (TextView)findViewById(R.id.showLocation);
         final TextView showAcceleration = (TextView)findViewById(R.id.showAcceleration);
         final TextView showMagneticField = (TextView)findViewById(R.id.showMagneticField);
+        final TextView showOrientation = (TextView)findViewById(R.id.showOrientation);
 
         showLocation.setText( "GPS" );
         showAcceleration.setText( "Accelerometer" );
         showMagneticField.setText( "Compass" );
+        showOrientation.setText( "Orientation" );
 
         Updates.subscribe( getApplicationContext(),
 
-            // Updates.GPS_LOCATION_UPDATE, 
-            Updates.ACCELERATION_UPDATE,
+            Updates.ROTATION_UPDATE, 
+            //Updates.ACCELERATION_UPDATE,
             //Updates.MAGNETIC_FIELD_UPDATE,
 
             new Subscriber() {
@@ -62,6 +64,13 @@ public class MainActivity extends Activity
                             float[] with = (float[]) payload;
                             showMagneticField.setText(
                             with[0] + " " + with[1] + " " + with[2]
+                            );
+                            break;
+
+                        case Updates.ROTATION_UPDATE:
+                            float[] orient = (float[]) payload;
+                            showOrientation.setText(
+                            orient[0] + " " + orient[1] + " " + orient[2]
                             );
                             break;
 

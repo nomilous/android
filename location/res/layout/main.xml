@@ -26,5 +26,12 @@
     android:gravity="center"
     />
 
+<TextView
+    android:id="@+id/showOrientation"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    />
+
 </LinearLayout>
 

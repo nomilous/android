@@ -56,6 +56,10 @@ public class OrientationServer  {
     private float[] accelerationVector    = new float[3];
     private float[] magneticFieldVector   = new float[3];
 
+    private static float[] rotationMatrix        = new float[9];
+    private static float[] remapedRotationMatrix = new float[9];
+    private static float[] orientationVector     = new float[3];
+
     private void sensorUpdate( SensorEvent event ) {
 
         switch( event.sensor.getType() ) {
@@ -86,6 +90,32 @@ public class OrientationServer  {
 
 
     private void updateRotation() {
+
+        if( SensorManager.getRotationMatrix( 
+
+            rotationMatrix, null, accelerationVector, magneticFieldVector 
+
+        )) {
+
+            SensorManager.remapCoordinateSystem(
+
+                rotationMatrix,
+                SensorManager.AXIS_X,
+                SensorManager.AXIS_Z, 
+                remapedRotationMatrix
+
+            );
+
+            SensorManager.getOrientation(
+
+                remapedRotationMatrix, 
+                orientationVector
+
+            );
+
+            this.subscriber.onMessage( Updates.ROTATION_UPDATE, orientationVector);
+
+        }
 
     }
 
