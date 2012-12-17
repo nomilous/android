@@ -11,20 +11,45 @@ import java.util.ArrayList;
 
 class Messenger implements Subscriber {
 
-    public void subscribe( Context appContext, int eventCode, Subscriber newSubscriber ) {
+    public void subscribe( Context appContext, int eventFlags, Subscriber newSubscriber ) {
 
         initSubscribersArray();
-        initServer( appContext, eventCode );
+
+        //
+        // TODO: only start as necessary
+        //
+
+        initServer( appContext );
 
         //
         // TODO: check handler not already registered... 
-        //      
+        // 
 
-        ((ArrayList)
-            
-             this.subscribers.get( eventCode ) 
 
-        ).add( newSubscriber );
+        //
+        // Bitwise 'and' (masks to detect each flag)
+        //
+
+        int enableLocation      = ( eventFlags & Updates.GPS_LOCATION_UPDATE );
+        int enableAcceleration  = ( eventFlags & Updates.ACCELERATION_UPDATE );
+        int enableMagneticField = ( eventFlags & Updates.MAGNETIC_FIELD_UPDATE );
+        int enableRotation      = ( eventFlags & Updates.ROTATION_UPDATE );
+
+        if( enableLocation == Updates.GPS_LOCATION_UPDATE ) addSubscriber( 
+            Updates.GPS_LOCATION_UPDATE, newSubscriber
+        );
+
+        if( enableAcceleration == Updates.ACCELERATION_UPDATE ) addSubscriber( 
+            Updates.ACCELERATION_UPDATE, newSubscriber
+        );
+
+        if( enableMagneticField == Updates.MAGNETIC_FIELD_UPDATE ) addSubscriber( 
+            Updates.MAGNETIC_FIELD_UPDATE, newSubscriber
+        );
+
+        if( enableRotation == Updates.ROTATION_UPDATE ) addSubscriber( 
+            Updates.ROTATION_UPDATE, newSubscriber
+        );
 
     }
 
@@ -47,64 +72,33 @@ class Messenger implements Subscriber {
 
     private ArrayList<Object> servers = null;
 
-    private void initServer( Context appContext, int eventCode ) {
+    private void initServer( Context appContext ) {
 
         if( this.servers == null ) {
 
-            //
-            // init Array of servers
-            //
-
             this.servers = new ArrayList<Object>();
 
-            for( int i = 0; i < Updates.HIGHEST_EVENT_CODE; i++ )
-
-                this.servers.add( null );
-
-        }
-
-        if( this.servers.get( eventCode ) != null ) return;
-
-        switch( eventCode ) {
-
-            case Updates.GPS_LOCATION_UPDATE:
-
-                this.servers.set( eventCode, new LocationServer( appContext, this ));
-                break;
-
-            case Updates.ACCELERATION_UPDATE:
-
-                initOrientationServer( appContext );
-                break;
-
-            case Updates.MAGNETIC_FIELD_UPDATE:
-
-                initOrientationServer( appContext );
-                break;
-
-            case Updates.ROTATION_UPDATE:
-
-                initOrientationServer( appContext );
-                break;
+            this.servers.add( new LocationServer( appContext, this ) );
+            this.servers.add( new OrientationServer( appContext, this ) );
 
         }
 
     }
 
-    private void initOrientationServer( Context appContext ) {
+    // private void initOrientationServer( Context appContext ) {
 
-        //
-        // OrientationServer provides 3 separate events
-        // Only maintain one instance
-        //
+    //     //
+    //     // OrientationServer provides 3 separate events
+    //     // Only maintain one instance
+    //     //
 
-        OrientationServer s = new OrientationServer( appContext, this );
+    //     OrientationServer s = new OrientationServer( appContext, this );
 
-        this.servers.set( Updates.ACCELERATION_UPDATE, s );
-        this.servers.set( Updates.MAGNETIC_FIELD_UPDATE, s );
-        this.servers.set( Updates.ROTATION_UPDATE, s );
+    //     this.servers.set( Updates.ACCELERATION_UPDATE, s );
+    //     this.servers.set( Updates.MAGNETIC_FIELD_UPDATE, s );
+    //     this.servers.set( Updates.ROTATION_UPDATE, s );
 
-    }
+    // }
 
     private ArrayList<Object> subscribers = null;
 
@@ -119,6 +113,16 @@ class Messenger implements Subscriber {
             this.subscribers.add( new ArrayList<Object>() );
 
         }
+
+    }
+
+    private void addSubscriber( int eventCode, Subscriber newSubscriber ) {
+
+        ((ArrayList)
+            
+             this.subscribers.get( eventCode ) 
+
+        ).add( newSubscriber );
 
     }
 

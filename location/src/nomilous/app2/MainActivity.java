@@ -31,9 +31,8 @@ public class MainActivity extends Activity
 
         Updates.subscribe( getApplicationContext(),
 
-            Updates.ROTATION_UPDATE, 
-            //Updates.ACCELERATION_UPDATE,
-            //Updates.MAGNETIC_FIELD_UPDATE,
+            Updates.GPS_LOCATION_UPDATE | Updates.ACCELERATION_UPDATE | 
+            Updates.MAGNETIC_FIELD_UPDATE | Updates.ROTATION_UPDATE,
 
             new Subscriber() {
 
