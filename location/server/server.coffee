@@ -3,16 +3,17 @@ server = require('http').createServer app
 io     = require('socket.io').listen server
 qrCode = require 'qrcode-npm'
 
-qr = qrCode.qrcode 4, 'M'
+qr = qrCode.qrcode 2, 'L'
 qr.addData 'nnn.nnn.nnn.nnn:nnnnn:nn'
 qr.make()
+imageTag = qr.createImgTag 20, 0
 
 server.listen 3000
 
 
 app.get '/', (req, res) -> 
 
-    res.send qr.createImgTag(4)
+    res.send imageTag
 
 
 
