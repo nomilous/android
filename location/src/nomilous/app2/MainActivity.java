@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.location.Location;
+import java.net.URI;
+import org.json.JSONArray;
+
+import com.codebutler.android_websockets.SocketIOClient;
 
 import nomilous.server.Updates;
 import nomilous.client.Subscriber;
@@ -23,6 +27,30 @@ public class MainActivity extends Activity
         final TextView showAcceleration = (TextView)findViewById(R.id.showAcceleration);
         final TextView showMagneticField = (TextView)findViewById(R.id.showMagneticField);
         final TextView showOrientation = (TextView)findViewById(R.id.showOrientation);
+        
+        SocketIOClient client = new SocketIOClient(
+
+            URI.create("http://10.0.0.11:3000"), 
+            new SocketIOClient.Handler() {
+            
+                @Override
+                public void onConnect() { /* BROKEN */ }
+
+                @Override
+                public void on(String event, JSONArray arguments) {
+                    Util.info(String.format("Got event %s: %s", event, arguments.toString()));
+                }
+
+                @Override
+                public void onDisconnect(int code, String reason) {}
+
+                @Override
+                public void onError(Exception error) {}
+
+            }
+        );
+
+        client.connect();
 
         showLocation.setText( "GPS" );
         showAcceleration.setText( "Accelerometer" );

@@ -1,0 +1,1 @@
+require('socket.io').listen(3000).sockets.on 'connection', (socket) -> socket.emit 'EVENT', KEY: 'VALUE'
