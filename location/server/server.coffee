@@ -1,7 +1,23 @@
-require('socket.io').listen(3000)
+app    = require('express')()
+server = require('http').createServer app
+io     = require('socket.io').listen server
+qrCode = require 'qrcode-npm'
 
-    .sockets.on 'connection', (socket) -> 
+qr = qrCode.qrcode 4, 'M'
+qr.addData 'nnn.nnn.nnn.nnn:nnnnn:nn'
+qr.make()
 
-        socket.on 'orientation', (payload) -> 
+server.listen 3000
 
-            console.log "\n", payload
+
+app.get '/', (req, res) -> 
+
+    res.send qr.createImgTag(4)
+
+
+
+io.sockets.on 'connection', (socket) -> 
+
+    socket.on 'orientation', (payload) -> 
+
+        console.log "\n", payload
