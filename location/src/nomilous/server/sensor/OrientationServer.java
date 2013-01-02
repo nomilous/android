@@ -44,7 +44,7 @@ public class OrientationServer  {
         sensorManager.registerListener( listener,
 
             sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-            SensorManager.SENSOR_DELAY_NORMAL
+            SensorManager.SENSOR_DELAY_GAME
 
         );
 
