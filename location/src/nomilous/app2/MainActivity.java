@@ -6,6 +6,7 @@ import android.widget.TextView;
 import android.location.Location;
 import java.net.URI;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.codebutler.android_websockets.SocketIOClient;
 
@@ -27,8 +28,8 @@ public class MainActivity extends Activity
         final TextView showAcceleration = (TextView)findViewById(R.id.showAcceleration);
         final TextView showMagneticField = (TextView)findViewById(R.id.showMagneticField);
         final TextView showOrientation = (TextView)findViewById(R.id.showOrientation);
-        
-        SocketIOClient client = new SocketIOClient(
+
+        final SocketIOClient client = new SocketIOClient(
 
             URI.create("http://10.0.0.11:3000"), 
             new SocketIOClient.Handler() {
@@ -96,6 +97,24 @@ public class MainActivity extends Activity
 
                         case Updates.ROTATION_UPDATE:
                             float[] orient = (float[]) payload;
+
+                            try {
+
+                                JSONArray message = new JSONArray();
+                                JSONObject orientation = new JSONObject();
+
+                                orientation.put( "x", orient[0] );
+                                orientation.put( "y", orient[1] );
+                                orientation.put( "z", orient[2] );
+                                
+                                message.put( orientation );
+
+                                client.emit( "orientation", message );
+
+                            } 
+
+                            catch( Exception e ) {}
+
                             showOrientation.setText(
                             orient[0] + " " + orient[1] + " " + orient[2]
                             );
